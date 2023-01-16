@@ -1,35 +1,25 @@
 import { useEffect } from 'react';
 import { Col, Spin } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import Searcher from './components/Searcher';
 import PokemonList from './components/PokemonList';
-import { getPokemon } from './api/index';
-import { getPokemonsWithDetails, setLoading } from './actions';
 import logo from './statics/logo.svg';
+import { fetchPokemonWithDetails } from './slices/dateSlice';
 import './App.css';
 
 
 function App() {
 
   //Uso de useSelector
-  const pokemons = useSelector(state => state.get('pokemons')).toJS();
-  const loading = useSelector(state => state.get('loading'));
+  const pokemons = useSelector(state => state.data.pokemons, shallowEqual);
+  
+  const loading = useSelector(state => state.ui.loading);
   const dispatch = useDispatch();
 
   //Hacemos uso del Hook de useEffect para obtener los datos de nustra api
   useEffect(() => {
-    const fetchPokemons = async () => {
-      //disparamos la accion para mostrar el loading
-      dispatch(setLoading(true));
-      
-      //disparamos la accion para la carga de los datos
-      const pokemonsRes = await getPokemon();
-      
-      dispatch(getPokemonsWithDetails(pokemonsRes));
-      dispatch(setLoading(false));
-    };
+    dispatch(fetchPokemonWithDetails());
 
-    fetchPokemons();
   }, []);
 
   return (
