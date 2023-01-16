@@ -12,8 +12,8 @@ import './App.css';
 function App() {
 
   //Uso de useSelector
-  const pokemons = useSelector(state => state.pokemons);
-  const loading = useSelector(state => state.loading);
+  const pokemons = useSelector(state => state.get('pokemons')).toJS();
+  const loading = useSelector(state => state.get('loading'));
   const dispatch = useDispatch();
 
   //Hacemos uso del Hook de useEffect para obtener los datos de nustra api
